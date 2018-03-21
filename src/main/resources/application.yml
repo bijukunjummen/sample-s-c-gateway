@@ -1,0 +1,42 @@
+test:
+  hostport: httpbin.org:80
+  uri: http://${test.hostport}
+
+#spring:
+#  cloud:
+#    gateway:
+#      default-filters:
+#      - AddResponseHeader=X-Response-Default-Foo, Default-Bar
+#      routes:
+#      # =====================================
+#      - id: default_path_to_httpbin
+#        uri: ${test.uri}
+#        order: 10000
+#        predicates:
+#        - Path=/uuid/**
+
+logging:
+  level:
+    org.springframework.cloud.gateway: trace
+    org.springframework.http.server.reactive: info
+    org.springframework.web.reactive: info
+    reactor.ipc.netty: info
+
+
+
+hystrix:
+  command:
+    somecommand:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
