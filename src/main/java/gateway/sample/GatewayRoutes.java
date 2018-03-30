@@ -5,6 +5,8 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.concurrent.TimeUnit;
+
 @Configuration
 public class GatewayRoutes {
     private final String httpbinUri = "http://httpbin.org:80";
@@ -33,7 +35,7 @@ public class GatewayRoutes {
                 )
                 .route(r ->
                         r.host("*.hystrix.org")
-                                .filters(f -> f.hystrix("somecommand"))
+                                .filters(f -> f.hystrix(config -> config.setName("somecommand")))
                                 .uri(httpbinUri)
                 )
                 .route(r ->
