@@ -34,11 +34,6 @@ public class GatewayRoutes {
                                 .uri(httpbinUri)
                 )
                 .route(r ->
-                        r.host("*.hystrix.org")
-                                .filters(f -> f.hystrix(config -> config.setName("somecommand")))
-                                .uri(httpbinUri)
-                )
-                .route(r ->
                         r.host("*.throttle.org")
                                 .filters(f -> f.filter(ThrottleGatewayFilter.newBuilder()
                                         .withCapacity(1)
