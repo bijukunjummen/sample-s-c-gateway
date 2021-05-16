@@ -17,14 +17,12 @@
 
 package gateway.sample;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -35,7 +33,6 @@ import java.time.Duration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = GatewaySampleApplication.class, webEnvironment = RANDOM_PORT)
 public class GatewaySampleApplicationTests {
 
@@ -45,7 +42,7 @@ public class GatewaySampleApplicationTests {
 	protected WebClient webClient;
 	protected String baseUri;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		baseUri = "http://localhost:" + port;
 		this.webClient = WebClient.create(baseUri);
