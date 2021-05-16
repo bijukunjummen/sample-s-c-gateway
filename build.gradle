@@ -1,60 +1,73 @@
 buildscript {
-	repositories {
-		mavenCentral()
-	}
-	ext {
-		set('kotlin-coroutines.version','1.4.3')
-	}
+    repositories {
+        mavenCentral()
+    }
+    ext {
+        set('kotlin-coroutines.version', '1.4.3')
+    }
 }
 
 plugins {
-	id 'org.springframework.boot' version '2.4.5'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'org.jetbrains.kotlin.jvm' version '1.4.31'
-	id 'org.jetbrains.kotlin.plugin.spring' version '1.4.31'
-	id 'java'
+    id 'com.google.cloud.tools.jib' version '3.0.0'
+    id 'org.springframework.boot' version '2.4.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.31'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.4.31'
+    id 'java'
 }
 
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
 compileKotlin {
-	kotlinOptions {
-		freeCompilerArgs = ["-Xjsr305=strict", "-Xskip-metadata-version-check"]
-		jvmTarget = "1.8"
-	}
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict", "-Xskip-metadata-version-check"]
+        jvmTarget = "1.8"
+    }
 }
 compileTestKotlin {
-	kotlinOptions {
-		freeCompilerArgs = ["-Xjsr305=strict", "-Xskip-metadata-version-check"]
-		jvmTarget = "1.8"
-	}
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict", "-Xskip-metadata-version-check"]
+        jvmTarget = "1.8"
+    }
 }
 
 repositories {
-	mavenCentral()
-	maven { url "https://repo.spring.io/milestone" }
+    mavenCentral()
+    maven { url "https://repo.spring.io/milestone" }
 }
 
 
 ext {
-  set('springCloudVersion', "2020.0.2")
+    set('springCloudVersion', "2020.0.2")
 }
 
 dependencies {
-	implementation('org.springframework.cloud:spring-cloud-starter-gateway')
-	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	testImplementation('org.springframework.boot:spring-boot-starter-test')
-	testImplementation('io.projectreactor:reactor-test')
-	implementation("org.isomorphism:token-bucket:1.7")
+    implementation('org.springframework.cloud:spring-cloud-starter-gateway')
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('io.projectreactor:reactor-test')
+    implementation("org.isomorphism:token-bucket:1.7")
 }
 
 dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-	}
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+jib {
+    from {
+        image = 'adoptopenjdk:11-jre-hotspot'
+    }
+    container {
+        ports = ["8080"]
+        jvmFlags = ["-XX:MinRAMPercentage=80", "-XX:MaxRAMPercentage=80"]
+    }
 }

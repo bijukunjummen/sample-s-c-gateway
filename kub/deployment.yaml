@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sample-s-c-gateway
+  name: sample-s-c-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-s-c-gateway
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: sample-s-c-gateway
+    spec:
+      containers:
+      - image: sample-s-c-gateway:0.0.1-SNAPSHOT
+        name: sample-s-c-gateway
+        resources: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: sample-s-c-gateway
+  name: sample-s-c-gateway
+spec:
+  ports:
+  - name: 8080-8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: sample-s-c-gateway
+  type: ClusterIP

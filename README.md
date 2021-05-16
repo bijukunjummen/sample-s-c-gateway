@@ -16,6 +16,7 @@ http http://localhost:8080/get
 ```
 http :8080/foo/anything Host:test.setpath.org
 ```
+
 ### Rewrite path from /foo/anything to /anything
 
 ```
