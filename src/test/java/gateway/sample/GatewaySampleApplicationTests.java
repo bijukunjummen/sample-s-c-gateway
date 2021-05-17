@@ -36,31 +36,31 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(classes = GatewaySampleApplication.class, webEnvironment = RANDOM_PORT)
 public class GatewaySampleApplicationTests {
 
-	@LocalServerPort
-	protected int port = 0;
+    @LocalServerPort
+    protected int port = 0;
 
-	protected WebClient webClient;
-	protected String baseUri;
+    protected WebClient webClient;
+    protected String baseUri;
 
-	@BeforeEach
-	public void setup() {
-		baseUri = "http://localhost:" + port;
-		this.webClient = WebClient.create(baseUri);
-	}
+    @BeforeEach
+    public void setup() {
+        baseUri = "http://localhost:" + port;
+        this.webClient = WebClient.create(baseUri);
+    }
 
-	@Test
-	public void contextLoads() {
-		Mono<ClientResponse> result = webClient.get()
-				.uri("/get")
-				.exchange();
+    @Test
+    public void contextLoads() {
+        Mono<ClientResponse> result = webClient.get()
+                .uri("/get")
+                .exchangeToMono(response -> Mono.just(response));
 
-		StepVerifier.create(result)
-				.consumeNextWith(
-						response -> {
-							assertThat(response.statusCode()).isEqualTo(HttpStatus.OK);
-							HttpHeaders httpHeaders = response.headers().asHttpHeaders();
-						})
-				.expectComplete()
-				.verify(Duration.ofSeconds(5));
-	}
+        StepVerifier.create(result)
+                .consumeNextWith(
+                        response -> {
+                            assertThat(response.statusCode()).isEqualTo(HttpStatus.OK);
+                            HttpHeaders httpHeaders = response.headers().asHttpHeaders();
+                        })
+                .expectComplete()
+                .verify(Duration.ofSeconds(5));
+    }
 }
